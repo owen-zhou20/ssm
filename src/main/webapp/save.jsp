@@ -13,8 +13,8 @@
 <body>
     <h1>Add account information form</h1>
     <form name="accountForm" action="${pageContext.request.contextPath}/account/save" method="post">
-        Account Name:<input type="text" name="name"><br>
-        Account Money:<input type="text" name="money"><br>
+        Account Name: <input type="text" name="name"><br>
+        Account Money: <input type="text" name="money"><br>
         <input type="submit" value="save"><br>
     </form>
 </body>
