@@ -26,6 +26,7 @@ public class AccountController {
     }
 
     //select
+    @RequestMapping("/findAll")
     public ModelAndView findAll(){
         List<Account> accountList = accountService.findAll();
         ModelAndView modelAndView = new ModelAndView();
