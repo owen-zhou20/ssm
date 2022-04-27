@@ -20,6 +20,45 @@ http://www.springframework.org/schema/context/spring-context.xsd">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
+    <!--load properties-->
+    <context:property-placeholder location="classpath:jdbc.properties"></context:property-placeholder>
 
+    <!--datasource-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driver}"></property>
+        <property name="jdbcUrl" value="${jdbc.url}"></property>
+        <property name="user" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+    </bean>
+
+    <!--sessionFactory-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+        <!--load mybatis config-->
+        <property name="configLocation" value="classpath:sqlMapConfig-spring.xml"></property>
+    </bean>
+
+    <!--scan mapper package, for create mapper impl-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.itheima.mapper"></property>
+    </bean>
+
+    <!--transaction config-->
+    <!--transactionManager-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!--transaction advice-->
+    <tx:advice id="txAdvice">
+        <tx:attributes>
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!--transaction aop waring-->
+    <aop:config>
+        <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.itheima.service.impl.*.*(..))"></aop:advisor>
+    </aop:config>
 
 </beans>
